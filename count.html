@@ -12,35 +12,45 @@
             font-family: 'Lato', sans-serif;
         }
         
-        @media (prefers-color-scheme: dark) {
-            body {
-                background-color: #0D1B2A;
-            }
-        }
-        
         #timer {
-            color: white;
+            color: #eeeeee;
             text-transform: uppercase;
             font-size: 1.2em;
             letter-spacing: 5px;
             margin-top: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
         }
         
         .days {
             display: inline-block;
-            padding: 20px;
-            width: 180px;
+            padding: 2vw;
+            width: 20vw;
+            max-width: 200px;
             border-radius: 5px;
-            background: #ADD8E6; /* Babyblå */
+            background: #EF2F3C;
             color: white;
-            font-size: 2em;
+            font-size: 2vw;
+            min-width: 120px;
         }
         
         .numbers {
             font-family: 'Montserrat', sans-serif;
-            font-size: 4em;
+            font-size: 4vw;
             text-align: center;
             color: white;
+        }
+        
+        @media (max-width: 600px) {
+            .days {
+                width: 30vw;
+                font-size: 4vw;
+            }
+            .numbers {
+                font-size: 6vw;
+            }
         }
     </style>
 </head>
