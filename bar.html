@@ -46,6 +46,8 @@
             right: 0;
             bottom: -20px;
             font-size: 14px;
+            display: flex;
+            gap: 2px;
         }
 
         input {
@@ -54,6 +56,7 @@
             text-align: center;
             font-size: 14px;
             background: transparent;
+            color: black; /* Standard svart text */
         }
 
         input::-webkit-outer-spin-button,
@@ -68,6 +71,10 @@
             color: black;
         }
 
+        .light-mode input {
+            color: black;
+        }
+
         /* Mörkerläge */
         .dark-mode {
             background-color: #121212;
@@ -76,6 +83,10 @@
 
         .dark-mode .progress-bar {
             background: #333;
+        }
+
+        .dark-mode input {
+            color: white;
         }
     </style>
 </head>
