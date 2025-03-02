@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Progress Bar</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        .progress-container {
+            width: 100%;
+            max-width: 400px;
+            background-color: #ddd;
+            border-radius: 25px;
+            overflow: hidden;
+            margin: 20px auto;
+        }
+
+        .progress-bar {
+            height: 30px;
+            width: 0%;
+            background-color: #4caf50;
+            line-height: 30px;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            transition: width 0.5s ease-in-out;
+        }
+
+        .progress-text {
+            margin-top: 10px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Uppgiftsprogress</h2>
+    <div class="progress-container">
+        <div class="progress-bar" id="progress-bar">0%</div>
+    </div>
+    <p class="progress-text" id="progress-text">Laddar...</p>
+
+    <script>
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        // Hämta procent från URL
+        const progress = Math.min(Math.max(parseFloat(getQueryParam("progress")) || 0, 0), 100).toFixed(1);
+
+        // Uppdatera progressbaren
+        document.getElementById("progress-bar").style.width = progress + "%";
+        document.getElementById("progress-bar").innerText = progress + "%";
+        document.getElementById("progress-text").innerText = `Progress: ${progress}%`;
+    </script>
+
+</body>
+</html>
