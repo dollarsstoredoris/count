@@ -10,10 +10,10 @@
             color: black;
             font-family: Arial, sans-serif;
             display: flex;
-            flex-direction: column;
-            align-items: center;
             justify-content: center;
+            align-items: center;
             height: 100vh;
+            flex-direction: column;
         }
 
         .progress-container {
@@ -24,60 +24,92 @@
 
         .progress-bar {
             width: 100%;
-            background-color: #ddd;
-            border-radius: 10px;
+            height: 30px;
+            background: lightgray;
+            border-radius: 15px;
             overflow: hidden;
-            height: 20px;
             position: relative;
         }
 
         .progress-fill {
             height: 100%;
-            background-color: #4caf50;
+            background: #4CAF50;
             width: 0%;
-            transition: width 0.5s ease-in-out;
+            text-align: center;
+            line-height: 30px;
+            color: white;
+            font-weight: bold;
+            transition: width 0.3s ease-in-out;
         }
 
-        .progress-text {
+        .progress-info {
             position: absolute;
             right: 0;
             bottom: -20px;
-            font-size: 12px;
-            color: black;
+            font-size: 14px;
+        }
+
+        .input-container {
+            margin-top: 10px;
+            display: flex;
+            gap: 5px;
         }
 
         input {
             width: 40px;
-            text-align: center;
             border: none;
-            font-size: 12px;
+            text-align: center;
+            font-size: 14px;
+            background: transparent;
         }
 
-        input[type="number"]::-webkit-inner-spin-button, 
-        input[type="number"]::-webkit-outer-spin-button { 
-            -webkit-appearance: none; 
-            margin: 0; 
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
         }
     </style>
 </head>
 <body>
     <div class="progress-container">
         <div class="progress-bar">
-            <div class="progress-fill" id="progress-fill"></div>
+            <div class="progress-fill" id="progressFill">0%</div>
         </div>
-        <div class="progress-text">
-            <input type="number" id="completed" value="0" min="0" oninput="updateProgress()"> /
-            <span id="total">100</span>
+        <div class="progress-info">
+            <input type="number" id="completed" value="0" min="0"> /
+            <input type="number" id="total" value="100" min="1">
         </div>
     </div>
 
     <script>
         function updateProgress() {
             let completed = parseInt(document.getElementById("completed").value) || 0;
-            let total = parseInt(document.getElementById("total").innerText) || 100;
-            let percentage = (completed / total) * 100;
-            document.getElementById("progress-fill").style.width = percentage + "%";
+            let total = parseInt(document.getElementById("total").value) || 1;
+
+            if (completed > total) {
+                completed = total;
+                document.getElementById("completed").value = total;
+            }
+
+            let percent = Math.round((completed / total) * 100);
+            document.getElementById("progressFill").style.width = percent + "%";
+            document.getElementById("progressFill").textContent = percent + "%";
+
+            localStorage.setItem("progressData", JSON.stringify({ completed, total }));
         }
+
+        document.getElementById("completed").addEventListener("input", updateProgress);
+        document.getElementById("total").addEventListener("input", updateProgress);
+
+        window.onload = function () {
+            let savedData = localStorage.getItem("progressData");
+            if (savedData) {
+                let { completed, total } = JSON.parse(savedData);
+                document.getElementById("completed").value = completed;
+                document.getElementById("total").value = total;
+                updateProgress();
+            }
+        };
     </script>
 </body>
 </html>
