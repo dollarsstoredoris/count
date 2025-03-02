@@ -48,12 +48,6 @@
             font-size: 14px;
         }
 
-        .input-container {
-            margin-top: 10px;
-            display: flex;
-            gap: 5px;
-        }
-
         input {
             width: 40px;
             border: none;
@@ -69,22 +63,19 @@
         }
 
         /* Ljusläge */
-        @media (prefers-color-scheme: light) {
-            body {
-                background-color: white;
-                color: black;
-            }
+        .light-mode {
+            background-color: white;
+            color: black;
         }
 
         /* Mörkerläge */
-        @media (prefers-color-scheme: dark) {
-            body {
-                background-color: #121212;
-                color: white;
-            }
-            .progress-bar {
-                background: #333;
-            }
+        .dark-mode {
+            background-color: #121212;
+            color: white;
+        }
+
+        .dark-mode .progress-bar {
+            background: #333;
         }
     </style>
 </head>
@@ -116,6 +107,12 @@
             localStorage.setItem("progressData", JSON.stringify({ completed, total }));
         }
 
+        function applyTheme() {
+            const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+            document.body.classList.toggle("dark-mode", prefersDark);
+            document.body.classList.toggle("light-mode", !prefersDark);
+        }
+
         document.getElementById("completed").addEventListener("input", updateProgress);
         document.getElementById("total").addEventListener("input", updateProgress);
 
@@ -127,7 +124,10 @@
                 document.getElementById("total").value = total;
                 updateProgress();
             }
+            applyTheme();
         };
+
+        window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", applyTheme);
     </script>
 </body>
 </html>
