@@ -6,14 +6,13 @@
     <title>Progress Bar</title>
     <style>
         body {
-            background-color: white;
-            color: black;
             font-family: Arial, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             flex-direction: column;
+            transition: background-color 0.3s, color 0.3s;
         }
 
         .progress-container {
@@ -67,6 +66,25 @@
         input::-webkit-inner-spin-button {
             -webkit-appearance: none;
             margin: 0;
+        }
+
+        /* Ljusläge */
+        @media (prefers-color-scheme: light) {
+            body {
+                background-color: white;
+                color: black;
+            }
+        }
+
+        /* Mörkerläge */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #121212;
+                color: white;
+            }
+            .progress-bar {
+                background: #333;
+            }
         }
     </style>
 </head>
