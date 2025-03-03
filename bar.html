@@ -14,13 +14,11 @@
             flex-direction: column;
             transition: background-color 0.3s, color 0.3s;
         }
-
         .progress-container {
             width: 80%;
             max-width: 400px;
             position: relative;
         }
-
         .progress-bar {
             width: 100%;
             height: 30px;
@@ -29,7 +27,6 @@
             overflow: hidden;
             position: relative;
         }
-
         .progress-fill {
             height: 100%;
             background: #4CAF50;
@@ -40,53 +37,18 @@
             font-weight: bold;
             transition: width 0.3s ease-in-out;
         }
-
         .progress-info {
             position: absolute;
             right: 0;
             bottom: -20px;
             font-size: 14px;
-            display: flex;
-            gap: 2px;
         }
-
         input {
             width: 40px;
             border: none;
             text-align: center;
             font-size: 14px;
             background: transparent;
-            color: black; /* Standard svart text */
-        }
-
-        input::-webkit-outer-spin-button,
-        input::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-
-        /* Ljusläge */
-        .light-mode {
-            background-color: white;
-            color: black;
-        }
-
-        .light-mode input {
-            color: black;
-        }
-
-        /* Mörkerläge */
-        .dark-mode {
-            background-color: #121212;
-            color: white;
-        }
-
-        .dark-mode .progress-bar {
-            background: #333;
-        }
-
-        .dark-mode input {
-            color: white;
         }
     </style>
 </head>
@@ -102,43 +64,35 @@
     </div>
 
     <script>
-        function updateProgress() {
+        const API_URL = https://script.google.com/macros/s/AKfycbyCX-lgDLBUtNSRK6UlfQID1PB3JcHWXPEt1CcInqEF9Lb381a4_4WUO6oKEwE5uPI/exec;  
+
+        async function fetchProgress() {
+            const response = await fetch(API_URL);
+            const data = await response.json();
+            const progress = data.progress;
+            document.getElementById("progressFill").style.width = progress + "%";
+            document.getElementById("progressFill").textContent = progress + "%";
+        }
+
+        async function updateProgress() {
             let completed = parseInt(document.getElementById("completed").value) || 0;
             let total = parseInt(document.getElementById("total").value) || 1;
-
-            if (completed > total) {
-                completed = total;
-                document.getElementById("completed").value = total;
-            }
-
             let percent = Math.round((completed / total) * 100);
+
             document.getElementById("progressFill").style.width = percent + "%";
             document.getElementById("progressFill").textContent = percent + "%";
 
-            localStorage.setItem("progressData", JSON.stringify({ completed, total }));
-        }
-
-        function applyTheme() {
-            const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-            document.body.classList.toggle("dark-mode", prefersDark);
-            document.body.classList.toggle("light-mode", !prefersDark);
+            await fetch(API_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ progress: percent })
+            });
         }
 
         document.getElementById("completed").addEventListener("input", updateProgress);
         document.getElementById("total").addEventListener("input", updateProgress);
 
-        window.onload = function () {
-            let savedData = localStorage.getItem("progressData");
-            if (savedData) {
-                let { completed, total } = JSON.parse(savedData);
-                document.getElementById("completed").value = completed;
-                document.getElementById("total").value = total;
-                updateProgress();
-            }
-            applyTheme();
-        };
-
-        window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", applyTheme);
+        window.onload = fetchProgress;
     </script>
 </body>
 </html>
