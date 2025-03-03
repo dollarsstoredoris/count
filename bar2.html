@@ -68,17 +68,15 @@
 
         // ✅ Hämta progress från Google Sheets vid sidladdning
         function fetchProgress() {
-            fetch(WEB_APP_URL)
-                .then(res => res.json())
-                .then(data => {
-                    if (data.progress !== undefined) {
-                        let total = parseInt(document.getElementById("total").value) || 1;
-                        let completed = Math.round((data.progress / 100) * total);
-
-                        document.getElementById("completed").value = completed;
-                        document.getElementById("progressFill").style.width = data.progress + "%";
-                        document.getElementById("progressFill").textContent = data.progress + "%";
-                    }
+            fetch(WEB_APP_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ progress: 99 }) // Här skickas värdet 99 till Google Sheets
+            })
+                .then(res => res.json()) // Om svaret är JSON, parsa det
+                .then(console.log) // Logga svaret i webbläsarens console
+                .catch(console.error); // Fånga eventuella fel
+            
                 })
                 .catch(console.error);
         }
