@@ -40,7 +40,7 @@
         .progress-info {
             position: absolute;
             right: 0;
-            bottom: -20px;
+            bottom: -25px;
             font-size: 14px;
         }
         input {
@@ -64,23 +64,26 @@
     </div>
 
     <script>
-        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbw6hQdBbxPWdU8CHQgKF_y9ao0Ca-x95qt3e9jR4aI5pPxS2JavxCFZSdYnlWzlv0Hjww/exec"; // Byt ut med din Web App-URL
+        const WEB_APP_URL = "DIN_NYA_WEB_APP_URL"; // Byt ut med din riktiga Web App URL
 
-        // Funktion för att hämta progress från Google Sheets
+        // ✅ Hämta progress från Google Sheets vid sidladdning
         function fetchProgress() {
             fetch(WEB_APP_URL)
                 .then(res => res.json())
                 .then(data => {
                     if (data.progress !== undefined) {
-                        let completed = Math.round((data.progress / 100) * document.getElementById("total").value);
+                        let total = parseInt(document.getElementById("total").value) || 1;
+                        let completed = Math.round((data.progress / 100) * total);
+
                         document.getElementById("completed").value = completed;
-                        updateProgress();
+                        document.getElementById("progressFill").style.width = data.progress + "%";
+                        document.getElementById("progressFill").textContent = data.progress + "%";
                     }
                 })
                 .catch(console.error);
         }
 
-        // Funktion för att uppdatera progress både lokalt och i Google Sheets
+        // ✅ Uppdatera progress och skicka till Google Sheets
         function updateProgress() {
             let completed = parseInt(document.getElementById("completed").value) || 0;
             let total = parseInt(document.getElementById("total").value) || 1;
@@ -89,7 +92,7 @@
             document.getElementById("progressFill").style.width = percent + "%";
             document.getElementById("progressFill").textContent = percent + "%";
 
-            // Skicka progress till Google Sheets
+            // 🔄 Spara till Google Sheets
             fetch(WEB_APP_URL, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -97,11 +100,11 @@
             }).catch(console.error);
         }
 
-        // Event Listeners
+        // 🖱 Lägg till event listeners
         document.getElementById("completed").addEventListener("input", updateProgress);
         document.getElementById("total").addEventListener("input", updateProgress);
 
-        // Hämta progress vid sidladdning
+        // 🚀 Hämta progress vid sidladdning
         window.onload = fetchProgress;
     </script>
 </body>
